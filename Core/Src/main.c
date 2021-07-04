@@ -76,9 +76,6 @@ void MX_USB_HOST_Process(void);
 float mySinVal;
 float sample_dt;
 uint16_t sample_N;
-uint16_t i_t;
-
-uint32_t myDacVal;
 
 int16_t dataI2S[100];
 /* USER CODE END 0 */
@@ -413,26 +410,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-/*void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-   Prevent unused argument(s) compilation warning
-  UNUSED(htim);
-
-   NOTE : This function should not be modified, when the callback is needed,
-            the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
-
-  if(htim->Instance ==TIM2){
-	  mySinVal = sinf(i_t*2*PI*sample_dt);
-
-	  myDacVal = (mySinVal + 1)*127;
-
-	  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_8B_R, myDacVal);
-
-	  i_t++;
-	  if(i_t >= sample_N) i_t = 0;
-  }
-
-}*/
 /* USER CODE END 4 */
 
 /**
