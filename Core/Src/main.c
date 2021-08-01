@@ -115,8 +115,10 @@ int main(void)
   MX_I2S3_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  HAL_I2SEx_TransmitReceive_DMA(&hi2s3, txBuf, rxBuf, 4);
+
   CS43_Init(hi2c1, MODE_I2S);
-  CS43_SetVolume(25);
+  CS43_SetVolume(5);
   CS43_Enable_RightLeft(CS43_RIGHT_LEFT);
   CS43_Start();
 
@@ -128,7 +130,7 @@ int main(void)
   		dataI2S[i*2 + 1] =(mySinVal )*8000; //Left data  (1 3 5 7 9 11 13)
   	}
 
-  HAL_I2SEx_TransmitReceive_DMA(&hi2s3, txBuf, rxBuf, 4);
+
 
   /* USER CODE END 2 */
 
