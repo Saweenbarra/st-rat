@@ -118,7 +118,7 @@ int main(void)
   HAL_I2SEx_TransmitReceive_DMA(&hi2s3, txBuf, rxBuf, 4);
 
   CS43_Init(hi2c1, MODE_I2S);
-  CS43_SetVolume(5);
+  CS43_SetVolume(1);
   CS43_Enable_RightLeft(CS43_RIGHT_LEFT);
   CS43_Start();
 

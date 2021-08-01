@@ -1060,8 +1060,8 @@ int main(void)
  800096e:	f004 fe55 	bl	800561c <memcpy>
  8000972:	e894 000f 	ldmia.w	r4, {r0, r1, r2, r3}
  8000976:	f7ff fde3 	bl	8000540 <CS43_Init>
-  CS43_SetVolume(5);
- 800097a:	2005      	movs	r0, #5
+  CS43_SetVolume(1);
+ 800097a:	2001      	movs	r0, #1
  800097c:	f7ff ff4e 	bl	800081c <CS43_SetVolume>
   CS43_Enable_RightLeft(CS43_RIGHT_LEFT);
  8000980:	2003      	movs	r0, #3
