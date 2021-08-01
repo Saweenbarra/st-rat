@@ -298,6 +298,7 @@ PD14.Locked=true
 RCC.LSI_VALUE=32000
 SH.GPXTI0.0=GPIO_EXTI0
 USB_OTG_FS.VirtualMode=Host_Only
+NVIC.SPI3_IRQn=true\:0\:0\:false\:false\:true\:true\:true
 PA10.GPIO_Speed=GPIO_SPEED_FREQ_LOW
 Dma.SPI3_TX.1.Direction=DMA_MEMORY_TO_PERIPH
 USB_HOST0.BSP.name=Drive_VBUS_FS

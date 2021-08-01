@@ -79,14 +79,15 @@ float sample_dt;
 uint16_t sample_N;
 
 int16_t dataI2S[100];
+
+uint16_t rxBuf[8];
+uint16_t txBuf[8];
 /* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
-uint16_t rxBuf[8];
-uint16_t txBuf[8];
 int main(void)
 {
   /* USER CODE BEGIN 1 */
