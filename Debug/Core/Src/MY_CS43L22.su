@@ -1,7 +1,7 @@
 MY_CS43L22.c:31:13:write_register	24	static
 MY_CS43L22.c:39:13:read_register	24	static
 MY_CS43L22.c:48:6:CS43_Init	8	static
-MY_CS43L22.c:117:6:CS43_Enable_RightLeft	16	static
-MY_CS43L22.c:146:6:CS43_SetVolume	24	static
-MY_CS43L22.c:163:6:CS43_Start	8	static
-MY_CS43L22.c:187:6:CS43_Stop	8	static
+MY_CS43L22.c:118:6:CS43_Enable_RightLeft	16	static
+MY_CS43L22.c:147:6:CS43_SetVolume	24	static
+MY_CS43L22.c:164:6:CS43_Start	8	static
+MY_CS43L22.c:188:6:CS43_Stop	8	static

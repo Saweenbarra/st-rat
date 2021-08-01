@@ -63,6 +63,7 @@ void CS43_Init(I2C_HandleTypeDef i2c_handle, CS43_MODE outputMode)
 	write_register(POWER_CONTROL2,&iData[1]);
 	//(4): Automatic clock detection
 	iData[1] = (1 << 7);
+	iData[1] |= (1 << 0); //MCLKDIV2
 	write_register(CLOCKING_CONTROL,&iData[1]);
 	//(5): Interface control 1
 	read_register(INTERFACE_CONTROL1, iData);
