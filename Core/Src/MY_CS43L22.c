@@ -73,7 +73,8 @@ void CS43_Init(I2C_HandleTypeDef i2c_handle, CS43_MODE outputMode)
 	iData[1] &= ~(1 << 2);  // Left justified, up to 24 bit (default)
 	iData[1] |= (1 << 2);
 	
-	iData[1] |=  (3 << 0);  // 16-bit audio word length for I2S interface
+	//iData[1] |=  (3 << 0);  // 16-bit audio word length for I2S interface
+	iData[1] |=  (0 << 0);  // 24-bit audio word length for I2S interface
 	write_register(INTERFACE_CONTROL1,&iData[1]);
 	//(6): Passthrough A settings
 	read_register(PASSTHROUGH_A, &iData[1]);

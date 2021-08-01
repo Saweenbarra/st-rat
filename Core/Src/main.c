@@ -50,6 +50,7 @@
 I2C_HandleTypeDef hi2c1;
 
 I2S_HandleTypeDef hi2s3;
+DMA_HandleTypeDef hdma_i2s3_ext_rx;
 DMA_HandleTypeDef hdma_spi3_tx;
 
 SPI_HandleTypeDef hspi1;
@@ -84,6 +85,8 @@ int16_t dataI2S[100];
   * @brief  The application entry point.
   * @retval int
   */
+uint16_t rxBuf[8];
+uint16_t txBuf[8];
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -128,7 +131,7 @@ int main(void)
   		dataI2S[i*2 + 1] =(mySinVal )*8000; //Left data  (1 3 5 7 9 11 13)
   	}
 
-  HAL_I2S_Transmit_DMA(&hi2s3, (uint16_t *)dataI2S, sample_N*2);
+  HAL_I2SEx_TransmitReceive_DMA(&hi2s3, txBuf, rxBuf, 4);
 
   /* USER CODE END 2 */
 
@@ -247,12 +250,12 @@ static void MX_I2S3_Init(void)
   hi2s3.Instance = SPI3;
   hi2s3.Init.Mode = I2S_MODE_MASTER_TX;
   hi2s3.Init.Standard = I2S_STANDARD_PHILIPS;
-  hi2s3.Init.DataFormat = I2S_DATAFORMAT_16B;
+  hi2s3.Init.DataFormat = I2S_DATAFORMAT_24B;
   hi2s3.Init.MCLKOutput = I2S_MCLKOUTPUT_ENABLE;
-  hi2s3.Init.AudioFreq = I2S_AUDIOFREQ_48K;
+  hi2s3.Init.AudioFreq = I2S_AUDIOFREQ_96K;
   hi2s3.Init.CPOL = I2S_CPOL_LOW;
   hi2s3.Init.ClockSource = I2S_CLOCK_PLL;
-  hi2s3.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_DISABLE;
+  hi2s3.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;
   if (HAL_I2S_Init(&hi2s3) != HAL_OK)
   {
     Error_Handler();
@@ -311,6 +314,9 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
   /* DMA1_Stream5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
@@ -410,6 +416,55 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s){
+
+	//restore signed 24 bit sample from 16-bit buffers
+	int lSample = (int) (rxBuf[0]<<16)|rxBuf[1];
+	int rSample = (int) (rxBuf[2]<<16)|rxBuf[3];
+
+	// divide by 2 (rightshift) -> -3dB per sample
+	lSample = lSample>>1;
+	rSample = rSample>>1;
+
+	//sum to mono
+	lSample = rSample + lSample;
+	rSample = lSample;
+
+	//run HP on left channel and LP on right channel
+	/*lSample = Calc_IIR_Left(lSample);
+	rSample = Calc_IIR_Right(rSample);*/
+
+	//restore to buffer
+	txBuf[0] = (lSample>>16)&0xFFFF;
+	txBuf[1] = lSample&0xFFFF;
+	txBuf[2] = (rSample>>16)&0xFFFF;
+	txBuf[3] = rSample&0xFFFF;
+}
+
+void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s){
+
+	//restore signed 24 bit sample from 16-bit buffers
+	int lSample = (int) (rxBuf[4]<<16)|rxBuf[5];
+	int rSample = (int) (rxBuf[6]<<16)|rxBuf[7];
+
+	// divide by 2 (rightshift) -> -3dB per sample
+	lSample = lSample>>1;
+	rSample = rSample>>1;
+
+	//sum to mono
+	lSample = rSample + lSample;
+	rSample = lSample;
+
+	//run HP on left channel and LP on right channel
+	/*lSample = Calc_IIR_Left(lSample);
+	rSample = Calc_IIR_Right(rSample);*/
+
+	//restore to buffer
+	txBuf[4] = (lSample>>16)&0xFFFF;
+	txBuf[5] = lSample&0xFFFF;
+	txBuf[6] = (rSample>>16)&0xFFFF;
+	txBuf[7] = rSample&0xFFFF;
+}
 /* USER CODE END 4 */
 
 /**
