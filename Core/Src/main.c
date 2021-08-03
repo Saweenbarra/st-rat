@@ -430,7 +430,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s){
 
-	//restore signed 24 bit sample from 16-bit buffers
+	/*//restore signed 24 bit sample from 16-bit buffers
 	int lSample = (int) (rxBuf[0]<<16)|rxBuf[1];
 	int rSample = (int) (rxBuf[2]<<16)|rxBuf[3];
 
@@ -443,19 +443,19 @@ void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s){
 	rSample = lSample;
 
 	//run HP on left channel and LP on right channel
-	/*lSample = Calc_IIR_Left(lSample);
+	lSample = Calc_IIR_Left(lSample);
 	rSample = Calc_IIR_Right(rSample);*/
 
 	//restore to buffer
-	txBuf[0] = (lSample>>16)&0xFFFF;
-	txBuf[1] = lSample&0xFFFF;
-	txBuf[2] = (rSample>>16)&0xFFFF;
-	txBuf[3] = rSample&0xFFFF;
+	txBuf[0] = rxBuf[0];
+	txBuf[1] = rxBuf[1];
+	txBuf[2] = rxBuf[2];
+	txBuf[3] = rxBuf[3];
 }
 
 void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s){
 
-	//restore signed 24 bit sample from 16-bit buffers
+	/*//restore signed 24 bit sample from 16-bit buffers
 	int lSample = (int) (rxBuf[4]<<16)|rxBuf[5];
 	int rSample = (int) (rxBuf[6]<<16)|rxBuf[7];
 
@@ -468,14 +468,14 @@ void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s){
 	rSample = lSample;
 
 	//run HP on left channel and LP on right channel
-	/*lSample = Calc_IIR_Left(lSample);
+	lSample = Calc_IIR_Left(lSample);
 	rSample = Calc_IIR_Right(rSample);*/
 
 	//restore to buffer
-	txBuf[4] = (lSample>>16)&0xFFFF;
-	txBuf[5] = lSample&0xFFFF;
-	txBuf[6] = (rSample>>16)&0xFFFF;
-	txBuf[7] = rSample&0xFFFF;
+	txBuf[4] = rxBuf[4];
+	txBuf[5] = rxBuf[5];
+	txBuf[6] = rxBuf[6];
+	txBuf[7] = rxBuf[7];
 }
 /* USER CODE END 4 */
 
